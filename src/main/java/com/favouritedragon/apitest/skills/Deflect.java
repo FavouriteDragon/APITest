@@ -16,6 +16,9 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+import swordskillsapi.api.core.PlayerSkills;
+import swordskillsapi.api.core.SkillApiUtils;
+import swordskillsapi.api.core.TargetUtils;
 import swordskillsapi.api.skill.SkillActive;
 import swordskillsapi.api.skill.SkillGroup;
 
@@ -65,7 +68,7 @@ public class Deflect extends SkillActive {
 
 	@Override
 	public boolean displayInGroup(SkillGroup group) {
-		return super.displayInGroup(group) || group == Skills.UNARMED;
+		return super.displayInGroup(group) || group == SkillRegisterHandler.UNARMED;
 	}
 
 	@Override
@@ -184,7 +187,7 @@ public class Deflect extends SkillActive {
 		if (isActive()) {
 			if (--parryTimer <= getParryDelay() && playMissSound) {
 				playMissSound = false;
-				player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.4F, 0.5F);
+				player.playSound(SoundEvents.ENTITY_PLAYER_ATTACK_SWEEP, 0.4F, 0.5F);
 			}
 		} else if (player.getEntityWorld().isRemote && ticksTilFail > 0) {
 			--ticksTilFail;
@@ -198,15 +201,18 @@ public class Deflect extends SkillActive {
 	public boolean onBeingAttacked(EntityPlayer player, DamageSource source) {
 		if (source.getSourceOfDamage() instanceof EntityLivingBase) {
 			EntityLivingBase attacker = (EntityLivingBase) source.getSourceOfDamage();
+			System.out.println(player.getHeldItemMainhand());
 			if (attacksParried < getMaxParries() && parryTimer > getParryDelay() && player.getHeldItemMainhand() == null) {
-				if (!(source instanceof EntityDamageSourceIndirect)) {
+				System.out.println("HMMM");
+			//	if (!(source instanceof EntityDamageSourceIndirect)) {
 					++attacksParried; // increment after disarm check
 					player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.4F, 0.5F);
 					playMissSound = false;
-					Vec3d vel = player.getLookVec().scale(getKnockbackStrength());
-					attacker.addVelocity(vel.xCoord, vel.yCoord + 0.15, vel.zCoord);
+					//Vec3d vel = player.getLookVec().scale(getKnockbackStrength());
+					SkillApiUtils.knockTargetBack(attacker, player, getKnockbackStrength());
+
 					return true;
-				} // don't deactivate early, as there is a delay between uses
+				//} // don't deactivate early, as there is a delay between uses
 			}
 		}
 		if (source.getSourceOfDamage() instanceof EntityArrow || source.getSourceOfDamage() instanceof EntityThrowable || source.getSourceOfDamage() instanceof EntityFireball) {
