@@ -217,18 +217,6 @@ public class Deflect extends SkillActive {
                 //} // don't deactivate early, as there is a delay between uses
             }
         }
-        if (source.getSourceOfDamage() instanceof EntityArrow || source.getSourceOfDamage() instanceof EntityThrowable || source.getSourceOfDamage() instanceof EntityFireball) {
-            if (attacksParried < getMaxParries() && parryTimer > getParryDelay() && player.getHeldItemMainhand() == null) {
-                if (!(source instanceof EntityDamageSourceIndirect)) {
-                    ++attacksParried; // increment after disarm check
-                    player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.4F, 0.5F);
-                    playMissSound = false;
-                    Vec3d vel = player.getLookVec().scale(getKnockbackStrength() * 10);
-                    source.getSourceOfDamage().addVelocity(vel.xCoord, vel.yCoord + 0.15, vel.zCoord);
-                    return true;
-                } // don't d
-            }
-        }
         return false;
     }
 
@@ -248,7 +236,7 @@ public class Deflect extends SkillActive {
                             ++attacksParried; // increment after disarm check
                             player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.4F, 0.5F);
                             playMissSound = false;
-                            Vec3d vel = player.getLookVec().scale(getKnockbackStrength());
+                            Vec3d vel = player.getLookVec().scale(getKnockbackStrength() * 20);
                             projectile.addVelocity(vel.xCoord, vel.yCoord, vel.zCoord);
                         }
                     }
