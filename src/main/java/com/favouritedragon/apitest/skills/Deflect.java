@@ -236,7 +236,7 @@ public class Deflect extends SkillActive {
                             ++attacksParried; // increment after disarm check
                             player.playSound(SoundEvents.BLOCK_ANVIL_PLACE, 0.4F, 0.5F);
                             playMissSound = false;
-                            Vec3d vel = player.getLookVec().scale(getKnockbackStrength() * 20);
+                            Vec3d vel = player.getLookVec().scale(getKnockbackStrength() * 40);
                             projectile.addVelocity(vel.xCoord, vel.yCoord, vel.zCoord);
                         }
                     }
