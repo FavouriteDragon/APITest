@@ -11,6 +11,7 @@ public class SkillRegisterHandler {
 
 	/* Skill List **/
 	public static final SkillBase deflect = new Deflect("deflect").addDefaultTooltip().register("deflect");
+	public static final SkillBase sunbolt = new Sunbolt("sunbolt").addDefaultTooltip().register("sunbolt");
 
 	//Just so skills get registered
 	public static void init() {
